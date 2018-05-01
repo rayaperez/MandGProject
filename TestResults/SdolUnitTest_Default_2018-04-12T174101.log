@@ -1,0 +1,50 @@
+﻿2018-04-12T17:41:01.5951650+01:00;VSTestExecutionThread;Info;SpecFlow+Runner execution started
+2018-04-12T17:41:01.8363362+01:00;VSTestExecutionThread;Info;SpecRun Evaluation Mode: Please purchase at http://www.specflow.org/plus to remove test execution delay.
+2018-04-12T17:41:01.8373381+01:00;VSTestExecutionThread;Info;SpecRun: running tests in C:\project\SdolUnitTest\SdolUnitTest\bin\Debug\SdolUnitTest.dll
+2018-04-12T17:41:01.8373381+01:00;VSTestExecutionThread;Info;Profile: Default
+2018-04-12T17:41:15.9830534+01:00;Thread#13;Info;Discovering target: Default
+2018-04-12T17:41:15.9830534+01:00;Thread#13;Info;Discovering tests from assembly: C:\project\SdolUnitTest\SdolUnitTest\bin\Debug\SdolUnitTest.dll
+Appdomain Disposed
+Test Suite Dump
+#0: SdolUnitTest/Default - 
+#1: Default - 
+#2: SdolUnitTest - 
+#3: Scenarios - 
+#4: Acceptance Criteria Scenarios, 1234567 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+1234567
+#5: Acceptance Criteria Scenarios, 9123451 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+9123451
+#6: Acceptance Criteria Scenarios, 9ABCDE8 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+9ABCDE8
+#7: Acceptance Criteria Scenarios, Null - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+Null
+#8: Acceptance Criteria Scenarios, “” - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+%e2%80%9c%e2%80%9d
+#9: Acceptance Criteria Scenarios, 12 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+12
+#10: Acceptance Criteria Scenarios, 123456789 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+123456789
+#11: Acceptance Criteria Scenarios, 0709954 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+0709954
+#12: Acceptance Criteria Scenarios, B0YBKJ7 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+B0YBKJ7
+#13: Acceptance Criteria Scenarios, 9123458 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+9123458
+#14: Acceptance Criteria Scenarios, 9ABCDE1 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+9ABCDE1
+End: Test Suite Dump
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #4 from normal test queue 
+Thread#0:Scheduler: considering testitem #4 for thread 0
+Thread#0:TestItem#4:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#4:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#4:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #4 for thread 0
+Thread#0:Scheduler: Test #4 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread #0: creating new test thread executor for SdolUnitTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null (target: Default)
+Loading SpecRun type 'TechTalk.SpecRun.Framework.TestAssemblyExecutor' from: C:\Users\nasim\AppData\Local\Temp\VisualStudioTestExplorerExtensions\SpecRun.Runner.1.7.0\tools\TechTalk.SpecRun.Framework.Executor.dll
+Thread#0: Test #4/0 is started on thread #0
+Thread#0:T:-> Using app.config
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.7s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 17:41:55,372 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.1s)
+Thread#0:B:Given I enter following sedol number 1234567
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("1234567") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("False") (0.0s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: Sc

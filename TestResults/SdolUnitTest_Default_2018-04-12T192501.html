@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+
+
+<html>
+	<head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<title>SdolUnitTest Test Execution Report</title>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+        <script type="text/javascript">
+            /**
+            * jQuery.fn.sortElements
+            * --------------
+            * #author James Padolsey (http://james.padolsey.com)
+            * #version 0.11
+            * #updated 18-MAR-2010
+            * #url https://raw.github.com/jamespadolsey/jQuery-Plugins/master/sortElements/jquery.sortElements.js
+            * --------------
+            * #param Function comparator:
+            *   Exactly the same behaviour as [1,2,3].sort(comparator)
+            *   
+            * #param Function getSortable
+            *   A function that should return the element that is
+            *   to be sorted. The comparator will run on the
+            *   current collection, but you may want the actual
+            *   resulting sort to occur on a parent or another
+            *   associated element.
+            *   
+            *   E.g. $('td').sortElements(comparator, function(){
+            *      return this.parentNode; 
+            *   })
+            *   
+            *   The <td>'s parent (<tr>) will be sorted instead
+            *   of the <td> itself.
+            */
+            jQuery.fn.sortElements = (function () {
+
+                var sort = [].sort;
+
+                return function (comparator, getSortable) {
+
+                    getSortable = getSortable || function () { return this; };
+
+                    var placements = this.map(function () {
+
+                        var sortElement = getSortable.call(this),
+                parentNode = sortElement.parentNode,
+
+                        // Since the element itself will change position, we have
+                        // to have some way of storing it's original position in
+                        // the DOM. The easiest way is to have a 'flag' node:
+                nextSibling = parentNode.insertBefore(
+                    document.createTextNode(''),
+                    sortElement.nextSibling
+                );
+
+                        return function () {
+
+                            if (parentNode === this) {
+                                throw new Error(
+                        "You can't sort elements if any one is a descendant of another."
+                    );
+                            }
+
+                            // Insert before flag:
+                            parentNode.insertBefore(this, nextSibling);
+                            // Remove flag:
+                            parentNode.removeChild(nextSibling);
+
+                        };
+
+                    });
+
+                    return sort.call(this, comparator).each(function (i) {
+                        placements[i].call(getSortable.call(this));
+                    });
+
+                };
+
+            })();
+        </script>
+        <script type="text/javascript">
+            jQuery.fn.setBarSizes = (function () {
+                return function (metricName, maxBarSize, min) {
+                    var max = Math.max.apply(Math, $.makeArray($(this).map(function () { return Number($(this).attr('data-sr-' + metricName)); })));
+                    var scale = 1.0;
+                    while (max > 0.0 && max <= 10.0) {
+                        scale = scale * 10.0;
+                        max = max * 10.0;
+                    }
+                    max = (Math.ceil(max / 2) * 2) / scale;
+
+                    this.each(function () {
+                        var barAnchor = $(this).find('a');
+                        var actual = $(this).attr('data-sr-' + metricName);
+                        var newHeight = Math.max(Math.round(maxBarSize * (actual - min) / (max - min)), 2);
+                        barAnchor.css({ height: newHeight });
+                    });
+
+                    var unit = "";
+                    if (metricName.substr(metricName.length - 4, 4) === "time")
+                        unit = "s";
+
+                    $('#testview .scale-min-label').each(function () {
+                        $(this).text(min.toString() + unit);
+                    });
+                    $('#testview .scale-max-label').each(function () {
+                        $(this).text(max.toString() + unit);
+                    });
+                    var mid = max / 2;
+                    $('#testview .scale-mid-label').each(function () {
+                        $(this).text(mid.toString() + unit);
+                    });
+                };
+            })();
+
+            function getComparer(metricName, isDesc) {
+                return function (a, b) {
+                    var aNumber = Number($(a).attr('data-sr-' + metricName));
+                    var bNumber = Number($(b).attr('data-sr-' + metricName));
+                    var result = aNumber > bNumber ? 1 : (aNumber < bNumber ? -1 : 0);
+                    if (isDesc)
+                        result = -1 * result;
+
+                    if (result == 0 && metricName != "order")
+                        result = getComparer("order", false)(a, b);
+
+                    return result;
+                };
+            }
+
+            var currentSort = "";
+            function doSort(allowToggleDesc) {
+                var newSort = $("input[name='barSortOrder']:checked").val();
+                if (allowToggleDesc && currentSort == newSort) {
+                    $('#barSortDesc').click();
+                    doSort(false);
+                    return;
+                }
+                currentSort = newSort;
+                $('#testview td.testview-item').sortElements(getComparer(newSort, $('#barSortDesc').is(':checked')));
+            }
+
+
+            function doSetHeights(allowSort) {
+                var selectedMetric = $("input[name='barHeight']:checked").val();
+                $('#testview td.testview-item').setBarSizes(selectedMetric, 60, 0.0);
+
+                if (allowSort && currentSort != selectedMetric) {
+                    var $radios = $("input[name='barSortOrder']");
+                    $radios.filter('[value=' + selectedMetric + ']').attr('checked', true);
+                    $("#barSortDesc").attr("checked", [true]);
+                    doSort(false);
+                }
+            }
+
+            $(document).ready(function () {
+                $("input[name='barSortOrder']").click(function () { doSort(true); return true; });
+                $("input[name='barSortDesc']").change(function () { doSort(false); });
+                $("input[name='barHeight']").change(function () { doSetHeights(true); });
+
+                doSort(false);
+                doSetHeights(false);
+
+                $("div.scrollable").css({ 'overflow': 'auto' });
+            });
+        </script>
+
+        <style type="text/css">
+            body 
+            {
+                color: #000000;
+                font-family: Arial,Liberation Sans,DejaVu Sans,sans-serif;
+                line-height: 130%;
+            }
+            h1 {
+                font-family: Trebuchet MS,Liberation Sans,DejaVu Sans,sans-serif;
+                font-size: 170%;
+                font-weight: bold;
+            }            
+            h2 {
+                font-family: Trebuchet MS,Liberation Sans,DejaVu Sans,sans-serif;
+                font-size: 130%;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }            
+            h3 {
+                font-family: Trebuchet MS,Liberation Sans,DejaVu Sans,sans-serif;
+                font-size: 120%;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }            
+            a.bar
+            {
+                text-decoration: none;
+                display: block;
+                line-height: 1px;
+            }
+            .description
+            {
+                font-style: italic;
+            }
+            .log 
+            {
+                width: 600px;
+                white-space: pre-wrap;
+                display: block;
+                margin: 0px;
+            }
+            .errorMessage 
+            {
+                width: 600px;
+                color: Red;
+                font-weight: bold;
+            }
+            .stackTrace 
+            {
+                width: 600px;
+                white-space: pre-wrap;
+                font-style: italic;
+                color: Red;
+                display: block;
+            }
+            table.testEvents
+            {
+                border: solid 1px #e8eef4;
+                border-collapse: collapse;
+            }
+            table.testEvents td
+            {
+                vertical-align: top;
+                padding: 5px;
+                border: solid 1px #e8eef4;
+            }
+            table.testEvents th
+            {
+                padding: 6px 5px;
+                text-align: left;
+                background-color: #e8eef4;
+                border: solid 1px #e8eef4;                
+            }
+            .comment
+            {
+                font-style: italic;
+                font-size: smaller;
+            }
+            .startupBar
+            {
+                background-color: #EEEEEE;
+                cursor: default;
+            }
+            
+            .colorSucceeded
+            {
+                background-color: #90ED7B;
+            }
+            .colorIgnored
+            {
+                background-color: #FFFF85;
+            }
+            .colorPending
+            {
+                background-color: #D47BED;
+            }
+            .colorNothingToRun
+            {
+                background-color: #CCCCFF;
+            }
+            .colorSkipped
+            {
+                background-color: #CCCCFF;
+            }
+            .colorInconclusive
+            {
+                background-color: #7BEDED;
+            }
+            .colorCleanupFailed
+            {
+                background-color: #FFCCCC;
+            }
+            .colorRandomlyFailed
+            {
+                background-color: #EDB07B;
+            }
+            .colorFailed
+            {
+                background-color: #ED5F5F;
+            }
+            .colorInitializationFailed
+            {
+                background-color: #FF0000;
+            }
+            .colorFrameworkError
+            {
+                background-color: #FF0000;
+            }
+            ul.subNodeLinks
+            {
+                padding-left: 20px;
+                margin: 0px;
+            }
+            ul.subNodeLinks li
+            {
+                list-style: none;
+            }
+            
+            /* views general */
+            div.scrollable
+            {
+                /*overflow: auto; - thsi has to be set from js, because of an IE9 bug */
+            }
+            div.viewbox
+            {
+                position: relative;
+                border: 3px solid #e8eef4;
+            }
+            div.viewbox table
+            {
+                border: 0px;
+            }
+                        
+            /* testview */
+            #testview
+            {
+                padding-top: 23px;
+            }
+            
+            table.testview-items td
+            {
+                vertical-align: bottom;
+                padding: 0px 1px 0px 1px;
+            }
+            td.right-padding, td.left-padding
+            {
+                width: 25px;
+                min-width: 25px;
+            }
+            table.testview-items a.bar
+            {
+                width: 5px;
+            }
+            table.testview-items tr.testview-items-row
+            {
+                height: 60px;
+            }
+            
+            /* scale */
+            table.vertical-scale 
+            {
+                position: absolute;
+                top: 23px;
+                left: 0px;
+                width: 100%;
+                z-index: -100;
+            }
+            table.vertical-scale td, tr.horizontal-scale td
+            {
+                font-size: 60%;
+                line-height: normal;
+            }
+            table.vertical-scale tr.scale-max, table.vertical-scale tr.scale-mid 
+            {
+                height: 30px;
+            }
+            tr.horizontal-scale, table.vertical-scale tr.scale-min 
+            {
+                height: 12px;
+            }
+            
+            td.scale-max-label, td.scale-mid-label, td.scale-min-label
+            {
+                border-top: solid 1px #E6E6E6;
+                text-align: left;
+                vertical-align: top;
+            }
+            td.scale-10-label
+            {
+                border-left: solid 1px #E6E6E6;
+                text-align: left;
+                vertical-align: bottom;
+                padding-left: 1px;
+            }
+            tr.scale-mid td, tr.scale-min td, tr.scale-max td
+            {
+                border-top: solid 1px #E6E6E6;
+            }
+           
+            
+            /* bar-control */
+            #bar-control
+            {
+                font-size: 60%;
+                line-height: normal;
+                position: absolute;
+                right: 0px;
+                top: 0px;
+            }
+            #bar-control label
+            {
+                font-weight: bold;
+                vertical-align: middle;
+            }
+            #bar-control .option
+            {
+                vertical-align: middle;
+                text-transform: lowercase;
+            }
+            #bar-control input[type="checkbox"]
+            {
+                padding: 0 2px 0 3px;
+            }
+            #bar-control input
+            {
+                vertical-align: top;
+                height: 12px;
+                margin: 0px;
+                padding: 0px;
+            }
+            #bar-control div
+            {
+                float: right;
+                margin: 3px 5px 3px 5px;
+            }
+            
+            
+            /* timeline view */
+            #timelineview
+            {
+                padding-top: 5px;
+            }
+            table.timelineview a
+            {
+                height: 20px;
+            }
+            table.timelineview td
+            {
+                vertical-align: bottom;
+                padding: 0px 1px 0px 0px;
+                border: 0px;
+            }
+            tr.thread-items-row
+            {
+                height: 25px;
+            }
+            tr.thread-items-row td
+            {
+                vertical-align: bottom;
+            }
+            td.thread-label
+            {
+                padding: 0px 6px 0px 6px;
+                text-align: right;
+                line-height: 18px;
+                vertical-align: bottom;
+            }
+            th.thread-label
+            {
+                padding: 3px 6px 0px 6px;
+                line-height: 18px;
+                text-align: left;
+                vertical-align: bottom;
+            }
+        </style>
+	</head>
+	<body>
+        <h1>SdolUnitTest Test Execution Report</h1>
+        <ul>
+            <li>Project: SdolUnitTest</li>
+            <li>Configuration: Default</li>
+            <li>Test Assemblies: SdolUnitTest.dll</li>
+            <li>Start Time: 12/04/2018 19:25:08</li>
+            <li>Duration: 00:01:05.8653753</li>
+            <li>Test Threads: 1</li>
+        </ul>
+
+        <h2>Result: all tests passed</h2>
+        <table class="testEvents">
+                <tr>
+        <th colspan="2">Success rate</th>
+        <th>Tests</th>
+        <th>Succeeded</th>
+        <th>Failed</th>
+        <th>Pending</th>
+        <th>Ignored</th>
+        <th>Skipped</th>
+    </tr>
+
+                <tr>
+            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="11 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>11</td>
+    <td>11</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+
+    </tr>
+
+        </table>
+        
+        <h2>Test Timeline Summary</h2>
+
+        <div id="timelineview" class="viewbox">
+            <div class="scrollable">
+                <table cellpadding="0" cellspacing="0">
+                    <tr>
+                        <th class="thread-label" colspan="2">thread</th>
+                    </tr>
+                        <tr class="thread-items-row">
+                            <td class="thread-label" title="Machine: DESKTOP-VL9I4S3">#0</td>
+                            <td colspan="2">
+                                <table class="timelineview" cellpadding="0" cellspacing="0">
+                                    <tr>
+
+                                            <td>
+        <a
+            class="bar startupBar" 
+            style="width: 3px;" 
+                title="test thread startup" 
+        >&nbsp;</a>
+    </td>
+
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 3px;" 
+                title="Acceptance Criteria Scenarios, 1234567 (in Scenarios)" 
+                href="#t232113344.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 4px;" 
+                title="Acceptance Criteria Scenarios, 9123451 (in Scenarios)" 
+                href="#t1087739355.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 5px;" 
+                title="Acceptance Criteria Scenarios, 9ABCDE8 (in Scenarios)" 
+                href="#t439425035.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 5px;" 
+                title="Acceptance Criteria Scenarios, Null (in Scenarios)" 
+                href="#t-1153938542.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 5px;" 
+                title="Acceptance Criteria Scenarios, “” (in Scenarios)" 
+                href="#t-1215567430.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 5px;" 
+                title="Acceptance Criteria Scenarios, 12 (in Scenarios)" 
+                href="#t-1358263917.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 6px;" 
+                title="Acceptance Criteria Scenarios, 123456789 (in Scenarios)" 
+                href="#t-1717470660.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 6px;" 
+                title="Acceptance Criteria Scenarios, 0709954 (in Scenarios)" 
+                href="#t-572532601.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 4px;" 
+                title="Acceptance Criteria Scenarios, B0YBKJ7 (in Scenarios)" 
+                href="#t-2062837476.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 10px;" 
+                title="Acceptance Criteria Scenarios, 9123458 (in Scenarios)" 
+                href="#t1089246683.0"
+        >&nbsp;</a>
+    </td>
+    <td>
+        <a
+            class="bar colorSucceeded" 
+            style="width: 9px;" 
+                title="Acceptance Criteria Scenarios, 9ABCDE1 (in Scenarios)" 
+                href="#t439883787.0"
+        >&nbsp;</a>
+    </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    <tr class="horizontal-scale">
+                        <td>&nbsp;</td>
+                            <td class="scale-10-label" style="width: 70px;min-width: 70px;">0s</td>
+                        <td class="scale-10-label">60s</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <h2>Test Result View</h2>
+        <div id="testview" class="viewbox">
+            <div id="bar-control">
+                <div id="bar-control-sort">
+                    <label>sort by:</label>
+                    <span class="option"><input type="radio" name="barSortOrder" value="exectime" />Time</span>
+                    <span class="option"><input type="radio" name="barSortOrder" value="acttime" />Act Time</span>
+                    <span class="option"><input type="radio" name="barSortOrder" value="order" />Execution</span>
+                    <span class="option"><input type="radio" name="barSortOrder" value="rescode" checked="checked" />Result</span>
+                    <span class="option"><input type="checkbox" name="barSortDesc" id="barSortDesc" checked="checked" />desc</span>
+                </div>
+                <div id="bar-control-heights">
+                    <label>heights:</label>
+                    <span class="option"><input type="radio" checked="checked" name="barHeight" value="exectime" />Time</span>
+                    <span class="option"><input type="radio" name="barHeight" value="acttime" />Act Time</span>
+                    
+                </div>
+            </div>
+            <table class="vertical-scale" cellpadding="0" cellspacing="0">
+                <tr class="scale-max">
+                    <td class="left-padding scale-max-label">&nbsp;</td>
+                    <td colspan="11">&nbsp;</td>
+                    <td class="right-padding">&nbsp;</td>
+                </tr>
+                <tr class="scale-mid">
+                    <td class="left-padding scale-mid-label">&nbsp;</td>
+                    <td colspan="11">&nbsp;</td>
+                    <td class="right-padding">&nbsp;</td>
+                </tr>
+                <tr class="scale-min">
+                    <td class="left-padding scale-min-label">&nbsp;</td>
+                    <td colspan="11">&nbsp;</td>
+                    <td class="right-padding">&nbsp;</td>
+                </tr>
+            </table>
+            <div class="scrollable">
+                <table class="testview-items" cellpadding="0" cellspacing="0">
+                    <tr class="testview-items-row">
+                        <td class="left-padding">&nbsp;</td>
+    <td class="testview-item" 
+        data-sr-exectime="6.0936935" data-sr-rescode="110" data-sr-order="0" data-sr-acttime="0.3">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 40px;"
+            title="Acceptance Criteria Scenarios, 1234567 (in Scenarios)"
+            href="#t232113344.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="5.0350457" data-sr-rescode="110" data-sr-order="1" data-sr-acttime="0.309">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 33px;"
+            title="Acceptance Criteria Scenarios, 9123451 (in Scenarios)"
+            href="#t1087739355.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="5.0474785" data-sr-rescode="110" data-sr-order="2" data-sr-acttime="0.31">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 33px;"
+            title="Acceptance Criteria Scenarios, 9ABCDE8 (in Scenarios)"
+            href="#t439425035.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="5.1717993" data-sr-rescode="110" data-sr-order="3" data-sr-acttime="0.312">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 34px;"
+            title="Acceptance Criteria Scenarios, Null (in Scenarios)"
+            href="#t-1153938542.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="5.1069532" data-sr-rescode="110" data-sr-order="4" data-sr-acttime="0.309">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 33px;"
+            title="Acceptance Criteria Scenarios, “” (in Scenarios)"
+            href="#t-1215567430.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="5.0478314" data-sr-rescode="110" data-sr-order="5" data-sr-acttime="0.333">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 33px;"
+            title="Acceptance Criteria Scenarios, 12 (in Scenarios)"
+            href="#t-1358263917.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="5.8737969" data-sr-rescode="110" data-sr-order="6" data-sr-acttime="0.388">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 38px;"
+            title="Acceptance Criteria Scenarios, 123456789 (in Scenarios)"
+            href="#t-1717470660.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="5.5956138" data-sr-rescode="110" data-sr-order="7" data-sr-acttime="0.314">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 37px;"
+            title="Acceptance Criteria Scenarios, 0709954 (in Scenarios)"
+            href="#t-572532601.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="4.7068705" data-sr-rescode="110" data-sr-order="8" data-sr-acttime="0.31">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 31px;"
+            title="Acceptance Criteria Scenarios, B0YBKJ7 (in Scenarios)"
+            href="#t-2062837476.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="9.1852824" data-sr-rescode="110" data-sr-order="9" data-sr-acttime="0.975">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 60px;"
+            title="Acceptance Criteria Scenarios, 9123458 (in Scenarios)"
+            href="#t1089246683.0">&nbsp;</a>
+    </td>
+    <td class="testview-item" 
+        data-sr-exectime="8.6647413" data-sr-rescode="110" data-sr-order="10" data-sr-acttime="1.6">
+        <a
+            class="bar colorSucceeded" 
+            style="height: 57px;"
+            title="Acceptance Criteria Scenarios, 9ABCDE1 (in Scenarios)"
+            href="#t439883787.0">&nbsp;</a>
+    </td>
+                        <td class="right-padding">&nbsp;</td>
+                    </tr>
+                    <tr class="horizontal-scale">
+                        <td class="left-padding">&nbsp;</td>
+                        <td colspan="10">&nbsp;</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <h2>Feature Summary</h2>
+        <table class="testEvents">
+                <tr>
+            <th>Feature</th>
+        <th colspan="2">Success rate</th>
+        <th>Tests</th>
+        <th>Succeeded</th>
+        <th>Failed</th>
+        <th>Pending</th>
+        <th>Ignored</th>
+        <th>Skipped</th>
+            <th>Duration</th>
+    </tr>
+
+    <tr>
+            <td><a href="#f-1496687588">Scenarios</a></td>
+            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="11 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>11</td>
+    <td>11</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:01:05.5291065</td>
+
+    </tr>
+        </table>
+
+        <a name="error_summary" />
+        <h2>Error Summary</h2>
+        <table class="testEvents">
+                <tr>
+            <th>Test</th>
+        <th colspan="2">Success rate</th>
+        <th>Tests</th>
+        <th>Succeeded</th>
+        <th>Failed</th>
+        <th>Pending</th>
+        <th>Ignored</th>
+        <th>Skipped</th>
+    </tr>
+
+        </table>
+
+        <h2>Scenario Summary</h2>
+            <a name="f-1496687588" />
+            <h3>Feature: Scenarios</h3>
+                <div class="description"><pre>        As a QA tester I would like to confirm
+		That SEDOL UI responding correctly to possitive and negative scenarios</pre>
+                </div>
+            <table class="testEvents">
+                    <tr>
+            <th>Test</th>
+        <th colspan="2">Success rate</th>
+        <th>Tests</th>
+        <th>Succeeded</th>
+        <th>Failed</th>
+        <th>Pending</th>
+        <th>Ignored</th>
+        <th>Skipped</th>
+            <th>Duration</th>
+    </tr>
+
+                    <tr>
+                        <td>
+                                    <a href="#t232113344.0">Scenario: Acceptance Criteria Scenarios, 1234567</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:06.0936935</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t1087739355.0">Scenario: Acceptance Criteria Scenarios, 9123451</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:05.0350457</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t439425035.0">Scenario: Acceptance Criteria Scenarios, 9ABCDE8</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:05.0474785</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t-1153938542.0">Scenario: Acceptance Criteria Scenarios, Null</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:05.1717993</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t-1215567430.0">Scenario: Acceptance Criteria Scenarios, “”</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:05.1069532</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t-1358263917.0">Scenario: Acceptance Criteria Scenarios, 12</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:05.0478314</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t-1717470660.0">Scenario: Acceptance Criteria Scenarios, 123456789</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:05.8737969</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t-572532601.0">Scenario: Acceptance Criteria Scenarios, 0709954</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:05.5956138</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t-2062837476.0">Scenario: Acceptance Criteria Scenarios, B0YBKJ7</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:04.7068705</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t1089246683.0">Scenario: Acceptance Criteria Scenarios, 9123458</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:09.1852824</td>
+
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                                    <a href="#t439883787.0">Scenario: Acceptance Criteria Scenarios, 9ABCDE1</a>
+
+                        </td>
+                        
+                            <td>
+            100%
+    </td>
+    <td>
+        <table class="timelineview" cellpadding="0" cellspacing="0">
+            <tr>
+                    <td>
+                        <a class="bar colorSucceeded" 
+                           style="width: 199px;" 
+                           title="1 succeeded" 
+                                                   />
+                    </td>
+            </tr>
+            
+        </table>
+    </td>
+    <td>1</td>
+    <td>1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+        <td>00:00:08.6647413</td>
+
+                        
+                    </tr>
+            </table>
+
+        <h2>Execution Details</h2>
+            <a name="t232113344.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, 1234567 (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:25:09</li>
+                <li>Execution time (sec): 6.0936935</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log"></pre>
+                        </td>
+                        <td>
+                            <!-- [Initialization: Feature - Scenarios] -->
+                            <pre class="log">-&gt; Using app.config</pre>
+                        </td>
+                        <td>Succeeded in 0.498s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 1234567] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.5s)</pre>
+                        </td>
+                        <td>Succeeded in 4.891s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 1234567] -->
+                            <pre class="log">2018-04-12 19:25:14,507 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.058s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number 1234567</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 1234567] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;1234567&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.092s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 1234567] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.002s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 1234567] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.001s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, 1234567] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (0.3s)</pre>
+                        </td>
+                        <td>Succeeded in 0.3s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  Checksum digit does not agree with the first 6 characters</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, 1234567] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; Checksum digit d...&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.049s</td>
+                    </tr>
+            </table>
+            <a name="t1087739355.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, 9123451 (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:25:15</li>
+                <li>Execution time (sec): 5.0350457</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9123451] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.9s)</pre>
+                        </td>
+                        <td>Succeeded in 4.312s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9123451] -->
+                            <pre class="log">2018-04-12 19:25:19,512 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.034s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number 9123451</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9123451] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;9123451&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.083s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9123451] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.001s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  True</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9123451] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;True&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.086s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, 9123451] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (0.3s)</pre>
+                        </td>
+                        <td>Succeeded in 0.309s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  Checksum digit does not agree with the first 6 characters</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, 9123451] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; Checksum digit d...&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.044s</td>
+                    </tr>
+            </table>
+            <a name="t439425035.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, 9ABCDE8 (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:25:20</li>
+                <li>Execution time (sec): 5.0474785</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9ABCDE8] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.8s)</pre>
+                        </td>
+                        <td>Succeeded in 4.319s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9ABCDE8] -->
+                            <pre class="log">2018-04-12 19:25:24,552 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.033s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number 9ABCDE8</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9ABCDE8] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;9ABCDE8&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.091s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9ABCDE8] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.001s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  True</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9ABCDE8] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;True&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.082s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, 9ABCDE8] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (0.3s)</pre>
+                        </td>
+                        <td>Succeeded in 0.31s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  Checksum digit does not agree with the first 6 characters</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, 9ABCDE8] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; Checksum digit d...&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.045s</td>
+                    </tr>
+            </table>
+            <a name="t-1153938542.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, Null (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:25:25</li>
+                <li>Execution time (sec): 5.1717993</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, Null] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (2.0s)</pre>
+                        </td>
+                        <td>Succeeded in 4.539s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, Null] -->
+                            <pre class="log">2018-04-12 19:25:29,820 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.034s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number Null</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, Null] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;Null&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.074s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, Null] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, Null] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.001s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, Null] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (0.3s)</pre>
+                        </td>
+                        <td>Succeeded in 0.312s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  Input string was not 7-characters long</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, Null] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; Input string was...&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.044s</td>
+                    </tr>
+            </table>
+            <a name="t-1215567430.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, “” (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:25:30</li>
+                <li>Execution time (sec): 5.1069532</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, “”] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (2.0s)</pre>
+                        </td>
+                        <td>Succeeded in 4.489s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, “”] -->
+                            <pre class="log">2018-04-12 19:25:34,941 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.033s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number “”</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, “”] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;“”&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.063s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, “”] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, “”] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, “”] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (0.3s)</pre>
+                        </td>
+                        <td>Succeeded in 0.309s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  Input string was not 7-characters long</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, “”] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; Input string was...&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.043s</td>
+                    </tr>
+            </table>
+            <a name="t-1358263917.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, 12 (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:25:35</li>
+                <li>Execution time (sec): 5.0478314</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 12] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.9s)</pre>
+                        </td>
+                        <td>Succeeded in 4.408s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 12] -->
+                            <pre class="log">2018-04-12 19:25:39,967 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.032s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number 12</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 12] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;12&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.066s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 12] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 12] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.001s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, 12] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (0.3s)</pre>
+                        </td>
+                        <td>Succeeded in 0.333s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  Input string was not 7-characters long</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, 12] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; Input string was...&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.042s</td>
+                    </tr>
+            </table>
+            <a name="t-1717470660.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, 123456789 (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:25:40</li>
+                <li>Execution time (sec): 5.8737969</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 123456789] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (2.7s)</pre>
+                        </td>
+                        <td>Succeeded in 5.157s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 123456789] -->
+                            <pre class="log">2018-04-12 19:25:45,764 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.033s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number 123456789</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 123456789] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;123456789&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.094s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 123456789] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 123456789] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, 123456789] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (0.4s)</pre>
+                        </td>
+                        <td>Succeeded in 0.388s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  Input string was not 7-characters long</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, 123456789] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; Input string was...&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.041s</td>
+                    </tr>
+            </table>
+            <a name="t-572532601.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, 0709954 (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:25:46</li>
+                <li>Execution time (sec): 5.5956138</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 0709954] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (2.3s)</pre>
+                        </td>
+                        <td>Succeeded in 4.886s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 0709954] -->
+                            <pre class="log">2018-04-12 19:25:51,368 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.035s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number 0709954</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 0709954] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;0709954&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.083s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  True</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 0709954] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;True&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.085s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 0709954] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, 0709954] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (0.3s)</pre>
+                        </td>
+                        <td>Succeeded in 0.314s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  No message</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, 0709954] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; No message&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.026s</td>
+                    </tr>
+            </table>
+            <a name="t-2062837476.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, B0YBKJ7 (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:25:52</li>
+                <li>Execution time (sec): 4.7068705</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, B0YBKJ7] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.6s)</pre>
+                        </td>
+                        <td>Succeeded in 3.998s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, B0YBKJ7] -->
+                            <pre class="log">2018-04-12 19:25:56,077 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.034s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number B0YBKJ7</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, B0YBKJ7] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;B0YBKJ7&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.091s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  True</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, B0YBKJ7] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;True&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.084s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  False</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, B0YBKJ7] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;False&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, B0YBKJ7] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (0.3s)</pre>
+                        </td>
+                        <td>Succeeded in 0.31s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  No message</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, B0YBKJ7] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; No message&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.023s</td>
+                    </tr>
+            </table>
+            <a name="t1089246683.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, 9123458 (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:25:56</li>
+                <li>Execution time (sec): 9.1852824</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9123458] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (5.3s)</pre>
+                        </td>
+                        <td>Succeeded in 7.734s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9123458] -->
+                            <pre class="log">2018-04-12 19:26:04,521 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.037s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number 9123458</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9123458] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;9123458&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.087s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  True</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9123458] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;True&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.081s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  True</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9123458] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;True&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.084s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, 9123458] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (1.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.975s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  No message</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, 9123458] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; No message&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.024s</td>
+                    </tr>
+            </table>
+            <a name="t439883787.0" />
+            <h3>Scenario: Acceptance Criteria Scenarios, 9ABCDE1 (in SdolUnitTest, Scenarios)</h3>
+                <div class="description">
+                    tags: UnitTest
+                </div>
+            <ul>
+                <li>Status: Succeeded</li>
+                <li>Start time: 12/04/2018 19:26:05</li>
+                <li>Execution time (sec): 8.6647413</li>
+                <li>Thread: #0</li>
+            </ul>
+            <table class="testEvents">
+                <tr>
+                    <th>Steps</th>
+                    <th>Trace</th>
+                    <th>Result</th>
+                </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I am on SEDOL webpage</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9ABCDE1] -->
+                            <pre class="log">done: CommonSteps.GivenIAmOnSEDOLWebpage() (4.1s)</pre>
+                        </td>
+                        <td>Succeeded in 6.574s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And page is fully loaded</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9ABCDE1] -->
+                            <pre class="log">2018-04-12 19:26:12,545 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.033s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Given I enter following sedol number 9ABCDE1</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9ABCDE1] -->
+                            <pre class="log">done: ScenariosSteps.GivenIEnterFollowingSedolNumber(&quot;9ABCDE1&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.109s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is Valid Sedol status is  True</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9ABCDE1] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsValidSedolStatusIsFalse(&quot;True&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.081s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">And Is User Defined status is  True</pre>
+                        </td>
+                        <td>
+                            <!-- [TestArrange: Scenario - Acceptance Criteria Scenarios, 9ABCDE1] -->
+                            <pre class="log">done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse(&quot;True&quot;) (0.1s)</pre>
+                        </td>
+                        <td>Succeeded in 0.086s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">When I press Submit</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAct: Scenario - Acceptance Criteria Scenarios, 9ABCDE1] -->
+                            <pre class="log">done: ScenariosSteps.WhenIPressSubmit() (1.6s)</pre>
+                        </td>
+                        <td>Succeeded in 1.6s</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <pre class="log">Then I receive the message  No message</pre>
+                        </td>
+                        <td>
+                            <!-- [TestAssert: Scenario - Acceptance Criteria Scenarios, 9ABCDE1] -->
+                            <pre class="log">done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(&quot; No message&quot;) (0.0s)</pre>
+                        </td>
+                        <td>Succeeded in 0.021s</td>
+                    </tr>
+            </table>
+	</body>
+</html>
+</a><div style='position: absolute; top:0px; right:10px; z-index: 1000; text-align: right; font-size: small; color: #FF5555'>
+Generated by an evaluation version of SpecRun.<br />
+This version can be used for evaluation purposes only.<br />
+For obtaining a registered license please visit <a href='http://www.specflow.org/plus'>http://www.specflow.org/plus</a>.
+</div>

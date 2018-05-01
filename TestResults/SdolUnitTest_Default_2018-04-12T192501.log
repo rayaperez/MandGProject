@@ -1,0 +1,327 @@
+﻿2018-04-12T19:25:01.5988400+01:00;VSTestExecutionThread;Info;SpecFlow+Runner execution started
+2018-04-12T19:25:01.7299613+01:00;VSTestExecutionThread;Info;SpecRun Evaluation Mode: Please purchase at http://www.specflow.org/plus to remove test execution delay.
+2018-04-12T19:25:01.7299613+01:00;VSTestExecutionThread;Info;SpecRun: running tests in C:\project\SdolUnitTest\SdolUnitTest\bin\Debug\SdolUnitTest.dll
+2018-04-12T19:25:01.7299613+01:00;VSTestExecutionThread;Info;Profile: Default
+2018-04-12T19:25:08.8244222+01:00;Thread#16;Info;Discovering target: Default
+2018-04-12T19:25:08.8254099+01:00;Thread#16;Info;Discovering tests from assembly: C:\project\SdolUnitTest\SdolUnitTest\bin\Debug\SdolUnitTest.dll
+Appdomain Disposed
+Test Suite Dump
+#0: SdolUnitTest/Default - 
+#1: Default - 
+#2: SdolUnitTest - 
+#3: Scenarios - 
+#4: Acceptance Criteria Scenarios, 1234567 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+1234567
+#5: Acceptance Criteria Scenarios, 9123451 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+9123451
+#6: Acceptance Criteria Scenarios, 9ABCDE8 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+9ABCDE8
+#7: Acceptance Criteria Scenarios, Null - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+Null
+#8: Acceptance Criteria Scenarios, “” - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+%e2%80%9c%e2%80%9d
+#9: Acceptance Criteria Scenarios, 12 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+12
+#10: Acceptance Criteria Scenarios, 123456789 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+123456789
+#11: Acceptance Criteria Scenarios, 0709954 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+0709954
+#12: Acceptance Criteria Scenarios, B0YBKJ7 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+B0YBKJ7
+#13: Acceptance Criteria Scenarios, 9123458 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+9123458
+#14: Acceptance Criteria Scenarios, 9ABCDE1 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+9ABCDE1
+End: Test Suite Dump
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #4 from normal test queue 
+Thread#0:Scheduler: considering testitem #4 for thread 0
+Thread#0:TestItem#4:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#4:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#4:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #4 for thread 0
+Thread#0:Scheduler: Test #4 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread #0: creating new test thread executor for SdolUnitTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null (target: Default)
+Loading SpecRun type 'TechTalk.SpecRun.Framework.TestAssemblyExecutor' from: C:\Users\nasim\AppData\Local\Temp\VisualStudioTestExplorerExtensions\SpecRun.Runner.1.7.0\tools\TechTalk.SpecRun.Framework.Executor.dll
+Thread#0: Test #4/0 is started on thread #0
+Thread#0:T:-> Using app.config
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.5s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:25:14,507 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.1s)
+Thread#0:B:Given I enter following sedol number 1234567
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("1234567") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("False") (0.0s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  Checksum digit does not agree with the first 6 characters
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" Checksum digit d...") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #5 from normal test queue 
+Thread#0:Scheduler: considering testitem #5 for thread 0
+Thread#0:TestItem#5:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#5:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#5:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #5 for thread 0
+Thread#0:Scheduler: Test #5 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread#0: Test #4/0 is finished on thread #0 as Succeeded within 6.0936935 seconds
+Thread#0: Test #5/0 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.9s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:25:19,512 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number 9123451
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("9123451") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("False") (0.0s)
+Thread#0:B:And Is User Defined status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("True") (0.1s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  Checksum digit does not agree with the first 6 characters
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" Checksum digit d...") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #6 from normal test queue 
+Thread#0:Scheduler: considering testitem #6 for thread 0
+Thread#0:TestItem#6:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#6:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#6:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #6 for thread 0
+Thread#0:Scheduler: Test #6 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread#0: Test #5/0 is finished on thread #0 as Succeeded within 5.0350457 seconds
+Thread#0: Test #6/0 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.8s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:25:24,552 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number 9ABCDE8
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("9ABCDE8") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("False") (0.0s)
+Thread#0:B:And Is User Defined status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("True") (0.1s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  Checksum digit does not agree with the first 6 characters
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" Checksum digit d...") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #7 from normal test queue 
+Thread#0:Scheduler: considering testitem #7 for thread 0
+Thread#0:TestItem#7:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#7:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#7:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #7 for thread 0
+Thread#0:Scheduler: Test #7 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread#0: Test #6/0 is finished on thread #0 as Succeeded within 5.0474785 seconds
+Thread#0: Test #7/0 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (2.0s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:25:29,820 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number Null
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("Null") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("False") (0.0s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  Input string was not 7-characters long
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" Input string was...") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #8 from normal test queue 
+Thread#0:Scheduler: considering testitem #8 for thread 0
+Thread#0:TestItem#8:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#8:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#8:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #8 for thread 0
+Thread#0:Scheduler: Test #8 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread#0: Test #7/0 is finished on thread #0 as Succeeded within 5.1717993 seconds
+Thread#0: Test #8/0 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (2.0s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:25:34,941 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number “”
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("“”") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("False") (0.0s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  Input string was not 7-characters long
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" Input string was...") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #9 from normal test queue 
+Thread#0:Scheduler: considering testitem #9 for thread 0
+Thread#0:TestItem#9:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#9:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#9:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #9 for thread 0
+Thread#0:Scheduler: Test #9 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread#0: Test #8/0 is finished on thread #0 as Succeeded within 5.1069532 seconds
+Thread#0: Test #9/0 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.9s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:25:39,967 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number 12
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("12") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("False") (0.0s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  Input string was not 7-characters long
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" Input string was...") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #10 from normal test queue 
+Thread#0:Scheduler: considering testitem #10 for thread 0
+Thread#0:TestItem#10:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#10:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#10:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #10 for thread 0
+Thread#0:Scheduler: Test #10 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread#0: Test #9/0 is finished on thread #0 as Succeeded within 5.0478314 seconds
+Thread#0: Test #10/0 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (2.7s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:25:45,764 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number 123456789
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("123456789") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("False") (0.0s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.4s)
+Thread#0:B:Then I receive the message  Input string was not 7-characters long
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" Input string was...") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #11 from normal test queue 
+Thread#0:Scheduler: considering testitem #11 for thread 0
+Thread#0:TestItem#11:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#11:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#11:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #11 for thread 0
+Thread#0:Scheduler: Test #11 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread#0: Test #10/0 is finished on thread #0 as Succeeded within 5.8737969 seconds
+Thread#0: Test #11/0 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (2.3s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:25:51,368 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number 0709954
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("0709954") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("True") (0.1s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  No message
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" No message") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #12 from normal test queue 
+Thread#0:Scheduler: considering testitem #12 for thread 0
+Thread#0:TestItem#12:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#12:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#12:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #12 for thread 0
+Thread#0:Scheduler: Test #12 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread#0: Test #11/0 is finished on thread #0 as Succeeded within 5.5956138 seconds
+Thread#0: Test #12/0 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.6s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:25:56,077 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number B0YBKJ7
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("B0YBKJ7") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("True") (0.1s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  No message
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" No message") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #13 from normal test queue 
+Thread#0:Scheduler: considering testitem #13 for thread 0
+Thread#0:TestItem#13:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#13:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#13:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #13 for thread 0
+Thread#0:Scheduler: Test #13 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread#0: Test #12/0 is finished on thread #0 as Succeeded within 4.7068705 seconds
+Thread#0: Test #13/0 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (5.3s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:26:04,521 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number 9123458
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("9123458") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("True") (0.1s)
+Thread#0:B:And Is User Defined status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("True") (0.1s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (1.0s)
+Thread#0:B:Then I receive the message  No message
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" No message") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #14 from normal test queue 
+Thread#0:Scheduler: considering testitem #14 for thread 0
+Thread#0:TestItem#14:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#14:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#14:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #14 for thread 0
+Thread#0:Scheduler: Test #14 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread#0: Test #13/0 is finished on thread #0 as Succeeded within 9.1852824 seconds
+Thread#0: Test #14/0 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (4.1s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:26:12,545 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number 9ABCDE1
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("9ABCDE1") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("True") (0.1s)
+Thread#0:B:And Is User Defined status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("True") (0.1s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (1.6s)
+Thread#0:B:Then I receive the message  No message
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" No message") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: at the end of normal test queue
+Thread#0:Scheduler: enumerator for thread is at end
+Thread#0:Scheduler: No more tests for thread
+Thread#0: Test #14/0 is finished on thread #0 as Succeeded within 8.6647413 seconds
+Appdomain Disposed
+Thread#-1:Scheduler: get next test for thread -1
+Thread#:Scheduler: at the end of normal test queue
+Thread#-1:Scheduler: enumerator for thread is at end
+Total: 11
+Succeeded: 11
+Ignored: 0
+Pending: 0
+Skipped: 0
+Failed: 0

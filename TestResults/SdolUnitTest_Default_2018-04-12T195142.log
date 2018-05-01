@@ -1,0 +1,116 @@
+﻿2018-04-12T19:51:42.5736177+01:00;VSTestExecutionThread;Info;SpecFlow+Runner execution started
+2018-04-12T19:51:42.7027092+01:00;VSTestExecutionThread;Info;SpecRun Evaluation Mode: Please purchase at http://www.specflow.org/plus to remove test execution delay.
+2018-04-12T19:51:42.7027092+01:00;VSTestExecutionThread;Info;SpecRun: running tests in C:\project\SdolUnitTest\SdolUnitTest\bin\Debug\SdolUnitTest.dll
+2018-04-12T19:51:42.7037102+01:00;VSTestExecutionThread;Info;Profile: Default
+2018-04-12T19:51:56.7929258+01:00;Thread#13;Info;Discovering target: Default
+2018-04-12T19:51:56.7939135+01:00;Thread#13;Info;Discovering tests from assembly: C:\project\SdolUnitTest\SdolUnitTest\bin\Debug\SdolUnitTest.dll
+Appdomain Disposed
+Test Suite Dump
+#0: SdolUnitTest/Default - 
+#1: Default - 
+#2: SdolUnitTest - 
+#3: Scenarios - 
+#11: Acceptance Criteria Scenarios, 0709954 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+0709954
+End: Test Suite Dump
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #11 from normal test queue 
+Thread#0:Scheduler: considering testitem #11 for thread 0
+Thread#0:TestItem#11:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#11:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#11:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #11 for thread 0
+Thread#0:Scheduler: Test #11 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread #0: creating new test thread executor for SdolUnitTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null (target: Default)
+Loading SpecRun type 'TechTalk.SpecRun.Framework.TestAssemblyExecutor' from: C:\Users\nasim\AppData\Local\Temp\VisualStudioTestExplorerExtensions\SpecRun.Runner.1.7.0\tools\TechTalk.SpecRun.Framework.Executor.dll
+Thread#0: Test #11/0 is started on thread #0
+Thread#0:T:-> Using app.config
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.9s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:52:03,243 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.1s)
+Thread#0:B:Given I enter following sedol number 0709954
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("0709954") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFollowing("True") (0.1s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFollowing("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  No message
+Thread#0:T:error: no such element: Unable to locate element: {"method":"class name","selector":"loader"}
+Thread#0:T:  (Session info: chrome=65.0.3325.181)
+Thread#0:T:  (Driver info: chromedriver=2.37.543627 (63642262d9fb93fb4ab52398be4286d844092a5e),platform=Windows NT 10.0.16299 x86_64)
+Thread#0:TestItem#11:Scheduler: reschedule tests for testitem #11
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: dequeuing a rescheduled testitem: #11
+Thread#0:Scheduler: considering testitem #11 for thread 0
+Thread#0:TestItem#11:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#11:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#11:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #11 for thread 0
+Thread#0:Scheduler: Test #11 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 1
+Thread#0: Test #11/0 is finished on thread #0 as Failed within 6.6724626 seconds
+Thread#0: Test #11/1 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (1.8s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:52:08,359 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number 0709954
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("0709954") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFollowing("True") (0.1s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFollowing("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  No message
+Thread#0:T:error: no such element: Unable to locate element: {"method":"class name","selector":"loader"}
+Thread#0:T:  (Session info: chrome=65.0.3325.181)
+Thread#0:T:  (Driver info: chromedriver=2.37.543627 (63642262d9fb93fb4ab52398be4286d844092a5e),platform=Windows NT 10.0.16299 x86_64)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: dequeuing a rescheduled testitem: #11
+Thread#0:Scheduler: considering testitem #11 for thread 0
+Thread#0:TestItem#11:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#11:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#11:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #11 for thread 0
+Thread#0:Scheduler: Test #11 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 2
+Thread#0: Test #11/1 is finished on thread #0 as Failed within 4.9564618 seconds
+Thread#0: Test #11/2 is started on thread #0
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (2.1s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 19:52:13,619 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.0s)
+Thread#0:B:Given I enter following sedol number 0709954
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("0709954") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  True
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFollowing("True") (0.1s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFollowing("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  No message
+Thread#0:T:error: no such element: Unable to locate element: {"method":"class name","selector":"loader"}
+Thread#0:T:  (Session info: chrome=65.0.3325.181)
+Thread#0:T:  (Driver info: chromedriver=2.37.543627 (63642262d9fb93fb4ab52398be4286d844092a5e),platform=Windows NT 10.0.16299 x86_64)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: at the end of normal test queue
+Thread#0:Scheduler: enumerator for thread is at end
+Thread#0:Scheduler: No more tests for thread
+Thread#0: Test #11/2 is finished on thread #0 as Failed within 5.2624596 seconds
+Appdomain Disposed
+Thread#-1:Scheduler: get next test for thread -1
+Thread#:Scheduler: at the end of normal test queue
+Thread#-1:Scheduler: enumerator for thread is at end
+Total: 1 (test executions: 3)
+Succeeded: 0
+Ignored: 0
+Pending: 0
+Skipped: 0
+Failed: 1

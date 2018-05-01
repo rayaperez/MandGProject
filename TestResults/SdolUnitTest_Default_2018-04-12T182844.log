@@ -1,0 +1,57 @@
+﻿2018-04-12T18:28:44.7526738+01:00;VSTestExecutionThread;Info;SpecFlow+Runner execution started
+2018-04-12T18:28:44.8897724+01:00;VSTestExecutionThread;Info;SpecRun Evaluation Mode: Please purchase at http://www.specflow.org/plus to remove test execution delay.
+2018-04-12T18:28:44.8897724+01:00;VSTestExecutionThread;Info;SpecRun: running tests in C:\project\SdolUnitTest\SdolUnitTest\bin\Debug\SdolUnitTest.dll
+2018-04-12T18:28:44.8897724+01:00;VSTestExecutionThread;Info;Profile: Default
+2018-04-12T18:28:52.9802367+01:00;Thread#13;Info;Discovering target: Default
+2018-04-12T18:28:52.9802367+01:00;Thread#13;Info;Discovering tests from assembly: C:\project\SdolUnitTest\SdolUnitTest\bin\Debug\SdolUnitTest.dll
+Appdomain Disposed
+Test Suite Dump
+#0: SdolUnitTest/Default - 
+#1: Default - 
+#2: SdolUnitTest - 
+#3: Scenarios - 
+#9: Acceptance Criteria Scenarios, 12 - TestAssembly:SdolUnitTest/Feature:Scenarios/Scenario:Acceptance+Criteria+Scenarios%2c+12
+End: Test Suite Dump
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: testitem #9 from normal test queue 
+Thread#0:Scheduler: considering testitem #9 for thread 0
+Thread#0:TestItem#9:testItemMatchesCurrentTestThread:UnSpecific
+Thread#0:TestItem#9:runsOnOneOtherThreadSpecific:False
+Thread#0:TestItem#9:runsOnOneOtherThreadUnspecific:False
+Thread#0:Scheduler: using testitem #9 for thread 0
+Thread#0:Scheduler: Test #9 is scheduled for thread
+Thread#0:Scheduler: with testItemExecutionIndex 0
+Thread #0: creating new test thread executor for SdolUnitTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null (target: Default)
+Loading SpecRun type 'TechTalk.SpecRun.Framework.TestAssemblyExecutor' from: C:\Users\nasim\AppData\Local\Temp\VisualStudioTestExplorerExtensions\SpecRun.Runner.1.7.0\tools\TechTalk.SpecRun.Framework.Executor.dll
+Thread#0: Test #9/0 is started on thread #0
+Thread#0:T:-> Using app.config
+Thread#0:B:Given I am on SEDOL webpage
+Thread#0:T:done: CommonSteps.GivenIAmOnSEDOLWebpage() (2.1s)
+Thread#0:B:And page is fully loaded
+Thread#0:T:2018-04-12 18:28:59,300 INFO SdolUnitTest.Code.BaseSteps - Sedol Web Application page is fully loaded
+Thread#0:T:done: CommonSteps.GivenPageIsFullyLoaded() (0.1s)
+Thread#0:B:Given I enter following sedol number 12
+Thread#0:T:done: ScenariosSteps.GivenIEnterFollowingSedolNumber("12") (0.1s)
+Thread#0:B:And Is Valid Sedol status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsValidSedolStatusIsFalse("False") (0.0s)
+Thread#0:B:And Is User Defined status is  False
+Thread#0:T:done: ScenariosSteps.GivenIsUserDefinedStatusIsFalse("False") (0.0s)
+Thread#0:B:When I press Submit
+Thread#0:T:done: ScenariosSteps.WhenIPressSubmit() (0.3s)
+Thread#0:B:Then I receive the message  Input string was not 7-characters long
+Thread#0:T:done: ScenariosSteps.ThenIReceiveTheMessageChecksumDigitDoesNotAgreeWithTheRestOfTheInput(" Input string was...") (0.0s)
+Thread#0:Scheduler: get next test for thread 0
+Thread#:Scheduler: at the end of normal test queue
+Thread#0:Scheduler: enumerator for thread is at end
+Thread#0:Scheduler: No more tests for thread
+Thread#0: Test #9/0 is finished on thread #0 as Succeeded within 6.3743681 seconds
+Appdomain Disposed
+Thread#-1:Scheduler: get next test for thread -1
+Thread#:Scheduler: at the end of normal test queue
+Thread#-1:Scheduler: enumerator for thread is at end
+Total: 1
+Succeeded: 1
+Ignored: 0
+Pending: 0
+Skipped: 0
+Failed: 0

@@ -1,0 +1,40 @@
+﻿
+
+  Execution Time: 00:00:17.5568570
+[12/04/2018 19:52:16 Informational] Report file: file:///C:\project\SdolUnitTest\TestResults\SdolUnitTest_Default_2018-04-12T195142.html
+[12/04/2018 19:52:16 Informational] Log file: file:///C:\project\SdolUnitTest\TestResults\SdolUnitTest_Default_2018-04-12T195142.log
+[12/04/2018 19:52:16 Informational] SpecFlow+Runner execution finished
+[12/04/2018 19:52:16 Informational] ========== Run test finished: 4 run (0:00:34.6260202) ==========
+[12/04/2018 19:56:54 Informational] ------ Run test started ------
+[12/04/2018 19:56:56 Informational] SpecFlow+Runner execution started
+[12/04/2018 19:56:56 Informational] SpecRun Evaluation Mode: Please purchase at http://www.specflow.org/plus to remove test execution delay.
+[12/04/2018 19:56:56 Informational] SpecRun: running tests in C:\project\SdolUnitTest\SdolUnitTest\bin\Debug\SdolUnitTest.dll
+[12/04/2018 19:56:56 Informational] Profile: Default
+[12/04/2018 19:56:56 Informational] Evaluation mode: test execution starts in 8 seconds...
+[12/04/2018 19:56:56 Informational] (this delay is removed in the registered version)
+[12/04/2018 19:57:04 Informational] Discovering target: Default
+[12/04/2018 19:57:04 Informational] Discovering tests from assembly: C:\project\SdolUnitTest\SdolUnitTest\bin\Debug\SdolUnitTest.dll
+[12/04/2018 19:57:11 Informational] Scenario: Acceptance Criteria Scenarios, 1234567 in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:57:16 Informational] Scenario: Acceptance Criteria Scenarios, 9123451 in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:57:21 Informational] Scenario: Acceptance Criteria Scenarios, 9ABCDE8 in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:57:25 Informational] Scenario: Acceptance Criteria Scenarios, Null in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:57:30 Informational] Scenario: Acceptance Criteria Scenarios, “” in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:57:36 Informational] Scenario: Acceptance Criteria Scenarios, 12 in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:57:41 Informational] Scenario: Acceptance Criteria Scenarios, 123456789 in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:57:46 Informational] Scenario: Acceptance Criteria Scenarios, 0709954 in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:57:51 Informational] Scenario: Acceptance Criteria Scenarios, B0YBKJ7 in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:57:57 Informational] Scenario: Acceptance Criteria Scenarios, 9123458 in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:58:03 Informational] Scenario: Acceptance Criteria Scenarios, 9ABCDE1 in Scenarios -> Succeeded on thread #0
+[12/04/2018 19:58:05 Informational] Result: all tests passed
+[12/04/2018 19:58:05 Informational]   Total: 11
+  Succeeded: 11
+  Ignored: 0
+  Pending: 0
+  Skipped: 0
+  Failed: 0
+
+  Execution Time: 00:00:59.4770122
+[12/04/2018 19:58:05 Informational] Report file: file:///C:\project\SdolUnitTest\TestResults\SdolUnitTest_Default_2018-04-12T195656.html
+[12/04/2018 19:58:05 Informational] Log file: file:///C:\project\SdolUnitTest\TestResults\SdolUnitTest_Default_2018-04-12T195656.log
+[12/04/2018 19:58:05 Informational] SpecFlow+Runner execution finished
+[12/04/2018 19:58:05 Informational] ========== Run test finished: 12 run (0:01:11.1386652) ==========
